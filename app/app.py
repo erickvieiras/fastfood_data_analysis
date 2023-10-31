@@ -32,7 +32,7 @@ start_value, end_value = st.sidebar.select_slider('Select a Rating Range:', opti
 
 
 price_range = st.sidebar.multiselect("Select Countries to analyze Restaurants:",
-        df.loc[:, "countries"].unique().tolist(),default=["Brazil", "England", "United States of America", "Indonesia", "Canada"])
+        df.loc[:, "countries"].unique().tolist(),default=["Brazil", "England", "New Zeland", "Indonesia", "Qatar", "Canada"])
 
 
 option = st.sidebar.selectbox('Select the Type Location:', ('Restaurant', 'City', 'Country'))
@@ -43,6 +43,17 @@ bool_param = st.sidebar.selectbox('Select the Highest or Lowest cost for a dish:
 tab1, tab2, tab3, tab4, tab5 = st.tabs(['Home', 'Ratings', 'Geografic View', 'Countries and restaurants', 'Cities and Cuisines'])
 
 with tab1:
+
+    st.header('About Project')
+    st.markdown("Restaurant Analytics Finder is a project using public data bringing together the largest number of registered Restaurants by country, with the purpose of helping you find the best culinary option closest to you or your next destination.") 
+    st.markdown("The project offers a multitude of options among countries, cuisines and locations with the most varied characteristics.")
+    st.markdown("The data analyzed has a series of features that help in decision-making and consumer behavior based on their experience in a particular country, restaurant and cuisine. Among the features we can highlight:")
+    st.markdown("1 - Country, City, Restaurant, Cuisine and type of dish;")
+    st.markdown("2 - Address and location of each restaurant;")
+    st.markdown("3 - Restaurants that deliver online and those that make reservations")
+    st.markdown("4 - Currency and Prices;")
+    st.markdown("5 - Ratings and votes.")
+
     st.download_button(
         label="Download CSV Project File",
         data=csv_data,
@@ -97,6 +108,29 @@ with tab2:
         st.plotly_chart(graph4, use_container_width=True)
         with st.expander('More Info'):
             st.dataframe(aux4)
+    cl1, cl2 = st.columns(2)
+    with cl1:
+        operation = st.selectbox('Select the of Operation: ', ('Mean', 'Total'))
+    with cl2:
+        bool_param_ = st.selectbox('Select the type of Vote: ', ('Best', 'Worst'))
+
+    if bool_param_ == 'Best':
+        bool_param_ = False
+    else:
+        bool_param_ = True
+
+    if operation == 'Mean':
+        aux8 = df_aux.groupby(['countries'])['votes'].mean().reset_index().sort_values(['votes'], ascending = bool_param_)
+        graph8 = px.bar(aux8, x = 'countries', y = 'votes', text_auto='0.2s', color = 'countries', title = 'AVERAGE VOTES BY COUNTRY')
+        st.plotly_chart(graph8, use_container_width=True)
+        with st.expander('More Info'):
+            st.dataframe(aux8)
+    else:
+        aux8 = df_aux.groupby(['countries'])['votes'].sum().reset_index().sort_values(['votes'], ascending = bool_param_)
+        graph8 = px.bar(aux8, x = 'countries', y = 'votes', text_auto='0.2s', color = 'countries', title = 'TOTAL VOTES BY COUNTRY')
+        st.plotly_chart(graph8, use_container_width=True)
+        with st.expander('More Info'):
+            st.dataframe(aux8)
 
 with tab3:
     countries = st.multiselect(
@@ -191,7 +225,7 @@ with tab4:
     on = st.toggle('Active Multiselect')
     if on:
         price_range = st.multiselect("Select countries to analyze behavior:", 
-                                     df.loc[:, "countries"].unique().tolist(),default=["Brazil", "England", "United States of America", "Indonesia", "Canada"])
+                                     df.loc[:, "countries"].unique().tolist(),default=["Brazil", "England", "New Zeland", "Indonesia", "Qatar", "Canada"])
 
     if len(price_range) > 0:
         df_aux = df.loc[df['countries'].isin(price_range)]
@@ -332,3 +366,17 @@ with tab5:
             st.plotly_chart(graph8, use_container_width=True)
             with st.expander('More Info'):
                 st.dataframe(aux8)
+
+    operation = st.selectbox('Select the of Operation:', ('Mean', 'Total'))
+    if operation == 'Mean':
+        aux8 = df_aux.groupby(['price_range'])['votes'].mean().reset_index().sort_values(['votes'], ascending = bool_param)
+        graph8 = px.bar(aux8, x = 'price_range', y = 'votes', text_auto='0.2s', color = 'price_range', title = 'AVERAGE VOTES BY TYPE OF DISH')
+        st.plotly_chart(graph8, use_container_width=True)
+        with st.expander('More Info'):
+            st.dataframe(aux8)
+    else:
+        aux8 = df_aux.groupby(['price_range'])['votes'].sum().reset_index().sort_values(['votes'], ascending = bool_param)
+        graph8 = px.bar(aux8, x = 'price_range', y = 'votes', text_auto='0.2s', color = 'price_range', title = 'TOTAL VOTES BY TYPE OF DISH')
+        st.plotly_chart(graph8, use_container_width=True)
+        with st.expander('More Info'):
+            st.dataframe(aux8)
