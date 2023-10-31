@@ -32,7 +32,7 @@ start_value, end_value = st.sidebar.select_slider('Select a Rating Range:', opti
 
 
 price_range = st.sidebar.multiselect("Select Countries to analyze Restaurants:",
-        df.loc[:, "countries"].unique().tolist(),default=["Brazil", "England", "New Zeland", "Indonesia", "Qatar", "Canada"])
+        df.loc[:, "countries"].unique().tolist(),default=["United Arab Emirates", "Brazil", "Qatar", "India", "Indonesia", "Canada"])
 
 
 option = st.sidebar.selectbox('Select the Type Location:', ('Restaurant', 'City', 'Country'))
@@ -225,7 +225,7 @@ with tab4:
     on = st.toggle('Active Multiselect')
     if on:
         price_range = st.multiselect("Select countries to analyze behavior:", 
-                                     df.loc[:, "countries"].unique().tolist(),default=["Brazil", "England", "New Zeland", "Indonesia", "Qatar", "Canada"])
+                                     df.loc[:, "countries"].unique().tolist(),default=["United Arab Emirates", "Brazil", "Qatar", "India", "Indonesia", "Canada"])
 
     if len(price_range) > 0:
         df_aux = df.loc[df['countries'].isin(price_range)]
@@ -261,11 +261,19 @@ with tab4:
 
 
     with cols2:
-        aux6 = df.groupby(['has_online_delivery'])['restaurant_id'].count().reset_index()
-        graph6 = px.pie(aux6, names = 'has_online_delivery', values = 'restaurant_id', color = 'has_online_delivery', title = 'VOLUMETRY OF RESTAURANTS THAT MAKE ONLINE DELIVERIES')
-        st.plotly_chart(graph6, use_container_width=True)
-        with st.expander('More Info'):
-            st.dataframe(aux6)
+        if len(price_range) > 0:
+            df_aux = df.loc[df['countries'].isin(price_range)]
+            aux6 = df_aux.groupby(['countries','has_online_delivery'])['restaurant_id'].count().reset_index()
+            graph6 = px.pie(df_aux, names = 'has_online_delivery', values = 'restaurant_id', color = 'has_online_delivery', title = 'VOLUMETRY OF RESTAURANTS THAT MAKE ONLINE DELIVERIES')
+            st.plotly_chart(graph6, use_container_width=True)
+            with st.expander('More Info'):
+                st.dataframe(df_aux)
+        else:
+            aux6 = df.groupby(['countries', 'has_online_delivery'])['restaurant_id'].count().reset_index()
+            graph6 = px.pie(aux6, names = 'has_online_delivery', values = 'restaurant_id', color = 'has_online_delivery', title = 'VOLUMETRY OF RESTAURANTS THAT MAKE ONLINE DELIVERIES')
+            st.plotly_chart(graph6, use_container_width=True)
+            with st.expander('More Info'):
+                st.dataframe(aux6)
 
     cols4, cols5 = st.columns(2)
     with cols4:
