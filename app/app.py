@@ -195,13 +195,15 @@ with tab4:
 
     if len(price_range) > 0:
         df_aux = df.loc[df['countries'].isin(price_range)]
+        df_aux = df_aux.loc[df_aux['countries'] != 'India']
         aux3 = df_aux.groupby(['countries', 'price_range'])['restaurant_id'].count().reset_index()
         graph3 = px.bar(aux3, x = 'countries', y = 'restaurant_id', text_auto='0.2s', color = 'price_range', title = 'PRICING OF GOURMET DISHES BY COUNTRY')
         st.plotly_chart(graph3, use_container_width=True)
         with st.expander('More Info'):
             st.dataframe(aux3)
     else:
-        aux3 = df.groupby(['countries', 'price_range'])['restaurant_id'].count().reset_index()
+        df_aux = df.loc[df['countries'] != 'India']
+        aux3 = df_aux.groupby(['countries', 'price_range'])['restaurant_id'].count().reset_index()
         graph3 = px.bar(aux3, x = 'countries', y = 'restaurant_id', text_auto='0.2s', color = 'price_range', title = 'PRICING OF GOURMET DISHES BY COUNTRY')
         st.plotly_chart(graph3, use_container_width=True)
         with st.expander('More Info'):
@@ -330,6 +332,3 @@ with tab5:
             st.plotly_chart(graph8, use_container_width=True)
             with st.expander('More Info'):
                 st.dataframe(aux8)
-
-
-
