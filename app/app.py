@@ -14,7 +14,7 @@ from streamlit_folium import folium_static
 
 # Page config and load data===================================================================================================================
 st.set_page_config(layout="wide")
-df = pd.read_csv('dataset/zomato.csv', low_memory=False, encoding='ISO-8859-1')
+df = pd.read_csv('../dataset/zomato.csv', low_memory=False, encoding='ISO-8859-1')
 df = dp.data_cleaning(df)
 
 #function convert to dataset download=========================================================================================================
@@ -25,7 +25,7 @@ def convert_df(dataset):
 csv_data = convert_df(df)
 
 #sidebar=======================================================================================================================================
-image = Image.open('img/logo.png')
+image = Image.open('../img/logo.png')
 st.sidebar.image(image)
 st.sidebar.title('Restaurant Analytics Finder')
 start_value, end_value = st.sidebar.select_slider('Select a Rating Range:', options= np.sort(df['aggregate_rating'].unique()), value=(0, 2.4))
