@@ -104,7 +104,7 @@ with tab2:
     with columns3:
         df_aux = df.loc[(df['aggregate_rating'] >= start_value) & (df['aggregate_rating'] <= end_value) ]
         aux4 = df_aux.groupby(['has_online_delivery'])['aggregate_rating'].mean().reset_index()
-        graph4 = px.pie(aux4, names = 'has_online_delivery', values = 'aggregate_rating', color = 'has_online_delivery', title = 'RATINGS AVERAGE BY ONLINE DELIVERIES')
+        graph4 = px.pie(aux4, names = 'has_online_delivery', values = 'aggregate_rating', hole = 0.5, color = 'has_online_delivery', title = 'RATINGS AVERAGE BY ONLINE DELIVERIES')
         st.plotly_chart(graph4, use_container_width=True)
         with st.expander('More Info'):
             st.dataframe(aux4)
@@ -264,13 +264,13 @@ with tab4:
         if len(price_range) > 0:
             df_aux = df.loc[df['countries'].isin(price_range)]
             aux6 = df_aux.groupby(['countries','has_online_delivery'])['restaurant_id'].count().reset_index()
-            graph6 = px.pie(df_aux, names = 'has_online_delivery', values = 'restaurant_id', color = 'has_online_delivery', title = 'VOLUMETRY OF RESTAURANTS THAT MAKE ONLINE DELIVERIES')
+            graph6 = px.pie(df_aux, names = 'has_online_delivery', values = 'restaurant_id', hole = 0.5, color = 'has_online_delivery', title = 'VOLUMETRY OF RESTAURANTS THAT MAKE ONLINE DELIVERIES')
             st.plotly_chart(graph6, use_container_width=True)
             with st.expander('More Info'):
                 st.dataframe(df_aux)
         else:
             aux6 = df.groupby(['countries', 'has_online_delivery'])['restaurant_id'].count().reset_index()
-            graph6 = px.pie(aux6, names = 'has_online_delivery', values = 'restaurant_id', color = 'has_online_delivery', title = 'VOLUMETRY OF RESTAURANTS THAT MAKE ONLINE DELIVERIES')
+            graph6 = px.pie(aux6, names = 'has_online_delivery', values = 'restaurant_id', hole = 0.5, color = 'has_online_delivery', title = 'VOLUMETRY OF RESTAURANTS THAT MAKE ONLINE DELIVERIES')
             st.plotly_chart(graph6, use_container_width=True)
             with st.expander('More Info'):
                 st.dataframe(aux6)
